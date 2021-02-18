@@ -7,6 +7,7 @@ import {
   Directions,
   Tile,
   Grid,
+  Scores,
 } from './constants.js';
 
 class Game {
@@ -17,6 +18,8 @@ class Game {
     this.canvas = document.getElementById('game');
     this.ctx = this.canvas.getContext('2d');
     this.munn = new PackMunn(Point.fromArray(Spawn.MUNN), Directions.NONE);
+    this.score = 0;
+    this.scoreElement = document.getElementsByClassName('score')[0];
   }
 
   getSquareColour = (row, col) => {
@@ -27,6 +30,8 @@ class Game {
         return 'black';
       case Tile.PATH_VISITED:
         return 'blue';
+      case Tile.BUG:
+        return 'purple';
       default:
         return 'white';
     }
@@ -68,6 +73,10 @@ class Game {
     );
   };
 
+  drawScore = () => {
+    this.scoreElement.innerHTML = this.score - 10;
+  };
+
   findMidPointTile = (position) => {
     const midPointX = position.x * TILE_SIZE + TILE_SIZE / 2;
     const midPointY = position.y * TILE_SIZE + TILE_SIZE / 2;
@@ -100,6 +109,19 @@ class Game {
     });
   };
 
+  updateScore = () => {
+    const tile = Grid[this.munn.position.y][this.munn.position.x];
+
+    switch (tile) {
+      case Tile.PATH:
+        this.score += Scores.DOT;
+        break;
+      case Tile.BUG:
+        this.score += Scores.BUG;
+        break;
+    }
+  };
+
   moveCharacters = () => {
     switch (this.munn.direction) {
       case Directions.RIGHT:
@@ -115,6 +137,8 @@ class Game {
         this.munn.move(Directions.DOWN);
         break;
     }
+
+    this.updateScore();
   };
 
   update = () => {
@@ -124,6 +148,7 @@ class Game {
   render = () => {
     this.drawGrid();
     this.drawCharacters();
+    this.drawScore();
   };
 
   loop = () => {
