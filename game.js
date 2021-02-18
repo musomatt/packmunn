@@ -113,7 +113,7 @@ class Game {
         munnPosition.x === ghost.position.x &&
         munnPosition.y === ghost.position.y
       ) {
-        alert('u r ded');
+        console.log('u r ded');
       }
     });
   };
