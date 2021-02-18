@@ -74,7 +74,9 @@ class Game {
   };
 
   drawScore = () => {
-    this.scoreElement.innerHTML = this.score - 10;
+    if (Number(this.scoreElement.innerHTML) !== this.score) {
+      this.scoreElement.innerHTML = this.score;
+    }
   };
 
   findMidPointTile = (position) => {
