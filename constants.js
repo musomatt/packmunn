@@ -16,7 +16,10 @@ export const Directions = {
 
 export const Spawn = {
   MUNN: { POSITION: [1, 1], DIRECTION: Directions.NONE },
-  GHOSTS: [{ POSITION: [23, 9], DIRECTION: Directions.LEFT }],
+  GHOSTS: [
+    { POSITION: [23, 9], DIRECTION: Directions.DOWN },
+    { POSITION: [23, 1], DIRECTION: Directions.LEFT },
+  ],
 };
 
 export const Tile = {
