@@ -20,21 +20,21 @@ export class Audio {
   }
 
   startBackgroundMusic = () => {
-    this.backgroundAudioElement.play();
+    // this.backgroundAudioElement.play();
   };
 
   playMunnChomp = () => {
-    this.munnChompElement.currentTime = 0;
-    this.munnChompElement.play();
+    // this.munnChompElement.currentTime = 0;
+    // this.munnChompElement.play();
   };
 
   playMunnch = () => {
-    this.munnchElement.currentTime = 0;
-    this.munnchElement.play();
+    // this.munnchElement.currentTime = 0;
+    // this.munnchElement.play();
   };
 
   playMunnFunn = () => {
-    this.munnFunnElement.currentTime = 0;
-    this.munnFunnElement.play();
+    // this.munnFunnElement.currentTime = 0;
+    // this.munnFunnElement.play();
   };
 }

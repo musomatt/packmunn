@@ -130,12 +130,14 @@ class Game {
 
   checkIfMunnbreakable = () => {
     if (Grid[this.munn.position.y][this.munn.position.x] === Tile.BUG) {
-      console.log('bug');
       this.munn.isMunnbreakable = true;
+      this.munn.switchImage(this.munn.imageFrenzy);
+
       clearTimeout(this.munnbreakableTimeout);
+
       this.munnbreakableTimeout = setTimeout(() => {
         this.munn.isMunnbreakable = false;
-        console.log('No longer invincible');
+        this.munn.switchImage(this.munn.imageNormal);
       }, 7000);
     }
   };

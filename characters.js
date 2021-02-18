@@ -45,6 +45,8 @@ export class PackMunn extends Character {
     this.isMunnbreakable = false;
     this.image = new Image(CHARACTER_SIZE, CHARACTER_SIZE);
     this.image.src = 'munn-normal.png';
+    this.imageNormal = 'munn-normal.png';
+    this.imageFrenzy = 'munn-frenzy.png';
   }
 
   move = (direction) => {
@@ -56,6 +58,10 @@ export class PackMunn extends Character {
         this.needsUpdate = true;
       }
     }
+  };
+
+  switchImage = (image) => {
+    this.image.src = image;
   };
 }
 
