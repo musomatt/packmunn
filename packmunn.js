@@ -5,6 +5,14 @@ const Spawn = {
   MUNN: [1, 1],
 };
 
+const Directions = {
+  UP: "UP",
+  DOWN: "DOWN",
+  LEFT: "LEFT",
+  RIGHT: "RIGHT",
+  NONE: "NONE",
+};
+
 const Grid = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
@@ -24,23 +32,36 @@ class Point {
     this.x = x;
     this.y = y;
   }
+  static fromArray = (positionArray) => {
+    return new Point(positionArray[0], positionArray[1]);
+  };
 }
 
-class Character {}
+class Character {
+  constructor(position, direction) {
+    this.position = position;
+    this.direction = direction;
+  }
+}
 
-class PackMunn extends Character {}
+class PackMunn extends Character {
+  constructor(position, direction) {
+    super(position, direction);
+  }
+}
 
 class Game {
   constructor() {
     this.dt = 0;
     this.last = -1;
     this.speed = 0.4;
-    this.canvas = document.getElementById('game');
-    this.ctx = this.canvas.getContext('2d');
+    this.canvas = document.getElementById("game");
+    this.ctx = this.canvas.getContext("2d");
+    this.munn = new PackMunn(Point.fromArray(Spawn.MUNN), Directions.NONE);
   }
 
   getSquareColour = (row, col) => {
-    return Grid[row][col] === 1 ? '#000000' : '#FFFFFF';
+    return Grid[row][col] === 1 ? "#000000" : "#FFFFFF";
   };
 
   getSquarePosition = (row, col) => {
@@ -61,10 +82,36 @@ class Game {
     }
   };
 
+  drawCharacters = () => {
+    console.dir(this.munn);
+    const characterDrawPoint = this.findCharacterOffsetFromMidPoint(
+      this.findMidPointTile(this.munn.position)
+    );
+    this.ctx.fillStyle = "red";
+    this.ctx.fillRect(
+      characterDrawPoint.x,
+      characterDrawPoint.y,
+      CHARACTER_SIZE,
+      CHARACTER_SIZE
+    );
+  };
+
+  findMidPointTile = (position) => {
+    const midPointX = position.x * TILE_SIZE + TILE_SIZE / 2;
+    const midPointY = position.y * TILE_SIZE + TILE_SIZE / 2;
+    return new Point(midPointX, midPointY);
+  };
+
+  findCharacterOffsetFromMidPoint = (tileMidPoint) => {
+    const offset = CHARACTER_SIZE / 2;
+    return new Point(tileMidPoint.x - offset, tileMidPoint.y - offset);
+  };
+
   update = () => {};
 
   render = () => {
     this.drawGrid();
+    this.drawCharacters();
   };
 
   loop = () => {
