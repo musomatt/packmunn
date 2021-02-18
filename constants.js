@@ -4,6 +4,7 @@ export const CHARACTER_SIZE = 42;
 export const Scores = {
   DOT: 10,
   BUG: 50,
+  GHOST: 200,
 };
 
 export const Directions = {

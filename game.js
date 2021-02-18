@@ -108,13 +108,14 @@ class Game {
   };
 
   checkIfCollidedWithGhost = () => {
-    this.ghosts.forEach((ghost) => {
+    this.ghosts.forEach((ghost, i) => {
       if (
         this.munn.position.x === ghost.position.x &&
         this.munn.position.y === ghost.position.y
       ) {
         if (this.munn.isMunnbreakable) {
-          console.log('hooray');
+          this.ghosts.splice(i, 1);
+          this.score += Scores.GHOST;
         } else {
           console.log('u r ded');
         }
