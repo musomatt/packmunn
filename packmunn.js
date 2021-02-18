@@ -35,6 +35,22 @@ class Point {
   static fromArray = (positionArray) => {
     return new Point(positionArray[0], positionArray[1]);
   };
+  addX = (amount) => {
+    this.x += amount;
+    return this;
+  };
+  addY = (amount) => {
+    this.y += amount;
+    return this;
+  };
+  subX = (amount) => {
+    this.x -= amount;
+    return this;
+  };
+  subY = (amount) => {
+    this.y -= amount;
+    return this;
+  };
 }
 
 class Character {
@@ -42,6 +58,14 @@ class Character {
     this.position = position;
     this.direction = direction;
   }
+  move = (direction) => {
+    const newPosition = new Point(this.position.x, this.position.y);
+    switch (direction) {
+      case Directions.RIGHT:
+        newPosition.addX(1);
+        this.position = newPosition;
+    }
+  };
 }
 
 class PackMunn extends Character {
@@ -83,7 +107,6 @@ class Game {
   };
 
   drawCharacters = () => {
-    console.dir(this.munn);
     const characterDrawPoint = this.findCharacterOffsetFromMidPoint(
       this.findMidPointTile(this.munn.position)
     );
@@ -105,6 +128,28 @@ class Game {
   findCharacterOffsetFromMidPoint = (tileMidPoint) => {
     const offset = CHARACTER_SIZE / 2;
     return new Point(tileMidPoint.x - offset, tileMidPoint.y - offset);
+  };
+
+  setUpEventHandler = () => {
+    document.addEventListener("keydown", (event) => {
+      switch (event.key) {
+        case "ArrowLeft":
+          console.log("Left was pressed");
+          break;
+        case "ArrowRight":
+          this.munn.move(Directions.RIGHT);
+          break;
+        case "ArrowDown":
+          console.log("Down was pressed");
+          break;
+        case "ArrowUp":
+          console.log("Up was pressed");
+          break;
+        default:
+          console.log("invalid key");
+          break;
+      }
+    });
   };
 
   update = () => {};
@@ -136,6 +181,7 @@ class Game {
 
   init = () => {
     requestAnimationFrame(this.loop);
+    this.setUpEventHandler();
   };
 }
 
