@@ -42,6 +42,7 @@ export class Character {
 export class PackMunn extends Character {
   constructor(position, direction) {
     super(position, direction);
+    this.isMunnbreakable = false;
     this.image = new Image(CHARACTER_SIZE, CHARACTER_SIZE);
     this.image.src = 'munnfunn.png';
   }

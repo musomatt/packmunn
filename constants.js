@@ -4,6 +4,7 @@ export const CHARACTER_SIZE = 42;
 export const Scores = {
   DOT: 10,
   BUG: 50,
+  GHOST: 200,
 };
 
 export const Directions = {
@@ -19,6 +20,7 @@ export const Spawn = {
   GHOSTS: [
     { POSITION: [23, 9], DIRECTION: Directions.DOWN },
     { POSITION: [23, 1], DIRECTION: Directions.LEFT },
+    { POSITION: [3, 30], DIRECTION: Directions.LEFT },
   ],
 };
 
