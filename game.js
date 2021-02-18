@@ -164,10 +164,11 @@ class Game {
     switch (tile) {
       case Tile.PATH:
         this.score += Scores.DOT;
-        this.audio.playMunnChomp();
+        this.audio.playMunnch();
         break;
       case Tile.BUG:
         this.score += Scores.BUG;
+        this.audio.playMunnFunn();
         break;
     }
   };
