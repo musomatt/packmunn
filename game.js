@@ -1,118 +1,13 @@
-const TILE_SIZE = 24;
-const CHARACTER_SIZE = 42;
-
-const Spawn = {
-  MUNN: [1, 1],
-};
-
-const Directions = {
-  UP: 'UP',
-  DOWN: 'DOWN',
-  LEFT: 'LEFT',
-  RIGHT: 'RIGHT',
-  NONE: 'NONE',
-};
-
-const Tile = {
-  TERRAIN: 0,
-  PATH: 1,
-  PATH_VISITED: 2,
-};
-
-const Grid = [
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-  [0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
-  [0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
-  [0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
-  [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-  [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
-  [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
-  [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
-  [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-];
-
-class Point {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-  }
-  static fromArray = (positionArray) => {
-    return new Point(positionArray[0], positionArray[1]);
-  };
-
-  addX = (amount) => {
-    this.x += amount;
-    return this;
-  };
-
-  addY = (amount) => {
-    this.y += amount;
-    return this;
-  };
-
-  subX = (amount) => {
-    this.x -= amount;
-    return this;
-  };
-
-  subY = (amount) => {
-    this.y -= amount;
-    return this;
-  };
-
-  lerp = (v, t) => {
-    this.x = this.x + (v.x - this.x) * t;
-    this.y = this.y + (v.y - this.y) * t;
-    return this;
-  };
-}
-
-class Character {
-  constructor(position, direction) {
-    this.position = position;
-    this.direction = direction;
-    this.needsUpdate = false;
-  }
-
-  canMoveToPosition = (newPosition) => {
-    return Grid[newPosition.y][newPosition.x] !== Tile.TERRAIN;
-  };
-
-  move = (direction) => {
-    if (this.needsUpdate === false) {
-      const newPosition = new Point(this.position.x, this.position.y);
-
-      switch (direction) {
-        case Directions.RIGHT:
-          newPosition.addX(1);
-          break;
-        case Directions.LEFT:
-          newPosition.subX(1);
-          break;
-        case Directions.UP:
-          newPosition.subY(1);
-          break;
-        case Directions.DOWN:
-          newPosition.addY(1);
-          break;
-      }
-
-      if (this.canMoveToPosition(newPosition)) {
-        this.position = newPosition;
-        this.direction = direction;
-        this.needsUpdate = true;
-      }
-    }
-  };
-}
-
-class PackMunn extends Character {
-  constructor(position, direction) {
-    super(position, direction);
-  }
-}
+import { PackMunn } from './characters.js';
+import { Point } from './point.js';
+import {
+  TILE_SIZE,
+  CHARACTER_SIZE,
+  Spawn,
+  Directions,
+  Tile,
+  Grid,
+} from './constants.js';
 
 class Game {
   constructor() {
