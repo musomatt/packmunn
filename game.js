@@ -148,6 +148,11 @@ class Game {
     }
   };
 
+  gameOver = () => {
+    const modal = document.getElementById('gameOverModal');
+    modal.style.display = 'block';
+  };
+
   findMidPointTile = (position) => {
     const midPointX = position.x * TILE_SIZE + TILE_SIZE / 2;
     const midPointY = position.y * TILE_SIZE + TILE_SIZE / 2;
@@ -246,6 +251,7 @@ class Game {
       this.drawCharacters();
       this.drawScore();
     } else {
+      this.gameOver();
       console.log('game over buddy');
     }
   };
