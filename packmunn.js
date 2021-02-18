@@ -41,20 +41,30 @@ class Point {
   static fromArray = (positionArray) => {
     return new Point(positionArray[0], positionArray[1]);
   };
+
   addX = (amount) => {
     this.x += amount;
     return this;
   };
+
   addY = (amount) => {
     this.y += amount;
     return this;
   };
+
   subX = (amount) => {
     this.x -= amount;
     return this;
   };
+
   subY = (amount) => {
     this.y -= amount;
+    return this;
+  };
+
+  lerp = (v, t) => {
+    this.x = this.x + (v.x - this.x) * t;
+    this.y = this.y + (v.y - this.y) * t;
     return this;
   };
 }
@@ -91,6 +101,7 @@ class Character {
 
       if (this.canMoveToPosition(newPosition)) {
         this.position = newPosition;
+        this.direction = direction;
         this.needsUpdate = true;
       }
     }
@@ -107,7 +118,7 @@ class Game {
   constructor() {
     this.dt = 0;
     this.last = -1;
-    this.speed = 0.02;
+    this.speed = 0.15;
     this.canvas = document.getElementById('game');
     this.ctx = this.canvas.getContext('2d');
     this.munn = new PackMunn(Point.fromArray(Spawn.MUNN), Directions.NONE);
@@ -194,7 +205,26 @@ class Game {
     });
   };
 
-  update = () => {};
+  moveCharacters = () => {
+    switch (this.munn.direction) {
+      case Directions.RIGHT:
+        this.munn.move(Directions.RIGHT);
+        break;
+      case Directions.LEFT:
+        this.munn.move(Directions.LEFT);
+        break;
+      case Directions.UP:
+        this.munn.move(Directions.UP);
+        break;
+      case Directions.DOWN:
+        this.munn.move(Directions.DOWN);
+        break;
+    }
+  };
+
+  update = () => {
+    this.moveCharacters();
+  };
 
   render = () => {
     this.drawGrid();
