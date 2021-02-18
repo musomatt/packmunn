@@ -44,7 +44,7 @@ export class PackMunn extends Character {
     super(position, direction);
     this.isMunnbreakable = false;
     this.image = new Image(CHARACTER_SIZE, CHARACTER_SIZE);
-    this.image.src = 'munnfunn.png';
+    this.image.src = 'munn-normal.png';
   }
 
   move = (direction) => {

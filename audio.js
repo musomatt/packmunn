@@ -2,6 +2,7 @@ export class Audio {
   constructor() {
     this.backgroundAudioElement = document.createElement('audio');
     this.backgroundAudioElement.src = 'packmunn-background.mp3';
+    this.backgroundAudioElement.volume = 0.4;
 
     this.munnChompElement = document.createElement('audio');
     this.munnChompElement.src = 'munn-chomp.mp3';
@@ -10,11 +11,12 @@ export class Audio {
     this.munnFunnElement = document.createElement('audio');
     this.munnFunnElement.src = 'munn-funn.mp3';
     this.munnFunnElement.loop = false;
+    this.backgroundAudioElement.volume = 0.5;
 
     this.munnchElement = document.createElement('audio');
     this.munnchElement.src = 'munnch.mp3';
     this.munnchElement.loop = false;
-    this.munnchElement.volume = 0.2;
+    this.munnchElement.volume = 0.1;
   }
 
   startBackgroundMusic = () => {
@@ -22,8 +24,8 @@ export class Audio {
   };
 
   playMunnChomp = () => {
-    // this.munnChompElement.currentTime = 0;
-    // this.munnChompElement.play();
+    this.munnChompElement.currentTime = 0;
+    this.munnChompElement.play();
   };
 
   playMunnch = () => {

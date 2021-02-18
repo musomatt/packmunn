@@ -37,11 +37,11 @@ class Game {
   getSquareColour = (row, col) => {
     switch (Grid[row][col]) {
       case Tile.TERRAIN:
-        return 'white';
+        return 'transparent';
       case Tile.PATH:
       case Tile.PATH_VISITED:
       case Tile.BUG:
-        return 'black';
+        return '#946b69';
       default:
         return 'white';
     }
@@ -54,6 +54,8 @@ class Game {
   };
 
   drawGrid = () => {
+    this.ctx.clearRect(0, 0, 600, 770);
+
     for (let row = 0; row < Grid.length; row++) {
       for (let col = 0; col < Grid[row].length; col++) {
         const colour = this.getSquareColour(row, col);
