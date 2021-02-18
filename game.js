@@ -104,13 +104,12 @@ class Game {
       CHARACTER_SIZE,
       CHARACTER_SIZE
     );
-    this.checkIfDead(this.munn.position, [this.ghost.position]);
   };
 
   checkIfDead = (munnPosition, ghostPositions) => {
     ghostPositions.forEach((ghostPos) => {
       if (munnPosition.x === ghostPos.x && munnPosition.y === ghostPos.y) {
-        alert("u r ded");
+        alert('u r ded');
       }
     });
   };
@@ -184,7 +183,7 @@ class Game {
         break;
     }
 
-    this.updateScore();
+    this.checkIfDead(this.munn.position, [this.ghost.position]);
     switch (this.ghost.direction) {
       case Directions.RIGHT:
         this.ghost.move(Directions.RIGHT);
@@ -199,6 +198,9 @@ class Game {
         this.ghost.move(Directions.DOWN);
         break;
     }
+    // don't ask
+    this.checkIfDead(this.munn.position, [this.ghost.position]);
+    this.updateScore();
   };
 
   update = () => {
