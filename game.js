@@ -29,6 +29,8 @@ class Game {
     this.scoreElement = document.getElementsByClassName('score')[0];
     this.bugImage = new Image(CHARACTER_SIZE, CHARACTER_SIZE);
     this.bugImage.src = 'bug.png';
+    this.dotImage = new Image(TILE_SIZE, TILE_SIZE);
+    this.dotImage.src = 'dot.png';
     this.audio = new Audio();
     this.munnbreakableTimeout;
     this.ended = false;
@@ -67,6 +69,15 @@ class Game {
         if (Grid[row][col] === Tile.BUG) {
           this.ctx.drawImage(
             this.bugImage,
+            position.x,
+            position.y,
+            TILE_SIZE,
+            TILE_SIZE
+          );
+        }
+        if (Grid[row][col] === Tile.PATH) {
+          this.ctx.drawImage(
+            this.dotImage,
             position.x,
             position.y,
             TILE_SIZE,
