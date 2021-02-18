@@ -1,5 +1,5 @@
-import { Grid, Directions, Tile } from './constants.js';
-import { Point } from './point.js';
+import { Grid, Directions, Tile } from "./constants.js";
+import { Point } from "./point.js";
 
 export class Character {
   constructor(position, direction) {
@@ -12,25 +12,34 @@ export class Character {
     return Grid[newPosition.y][newPosition.x] !== Tile.TERRAIN;
   };
 
+  workOutNewPosition = (direction) => {
+    const newPosition = new Point(this.position.x, this.position.y);
+
+    switch (direction) {
+      case Directions.RIGHT:
+        newPosition.addX(1);
+        break;
+      case Directions.LEFT:
+        newPosition.subX(1);
+        break;
+      case Directions.UP:
+        newPosition.subY(1);
+        break;
+      case Directions.DOWN:
+        newPosition.addY(1);
+        break;
+    }
+    return newPosition;
+  };
+}
+
+export class PackMunn extends Character {
+  constructor(position, direction) {
+    super(position, direction);
+  }
   move = (direction) => {
     if (this.needsUpdate === false) {
-      const newPosition = new Point(this.position.x, this.position.y);
-
-      switch (direction) {
-        case Directions.RIGHT:
-          newPosition.addX(1);
-          break;
-        case Directions.LEFT:
-          newPosition.subX(1);
-          break;
-        case Directions.UP:
-          newPosition.subY(1);
-          break;
-        case Directions.DOWN:
-          newPosition.addY(1);
-          break;
-      }
-
+      const newPosition = this.workOutNewPosition(direction);
       if (this.canMoveToPosition(newPosition)) {
         this.position = newPosition;
         this.direction = direction;
@@ -40,8 +49,23 @@ export class Character {
   };
 }
 
-export class PackMunn extends Character {
+export class Ghost extends Character {
   constructor(position, direction) {
     super(position, direction);
   }
+  move = (direction) => {
+    if (this.needsUpdate === false) {
+      const newPosition = this.workOutNewPosition(direction);
+      if (this.canMoveToPosition(newPosition)) {
+        this.position = newPosition;
+        this.direction = direction;
+        this.needsUpdate = true;
+      } else {
+        const randomDirection = Object.values(Directions).slice(0, 4)[
+          Math.floor(Math.random() * 4)
+        ];
+        this.move(randomDirection);
+      }
+    }
+  };
 }

@@ -1,5 +1,5 @@
-import { PackMunn } from './characters.js';
-import { Point } from './point.js';
+import { Ghost, PackMunn } from "./characters.js";
+import { Point } from "./point.js";
 import {
   TILE_SIZE,
   CHARACTER_SIZE,
@@ -8,32 +8,39 @@ import {
   Tile,
   Grid,
   Scores,
-} from './constants.js';
+} from "./constants.js";
 
 class Game {
   constructor() {
     this.dt = 0;
     this.last = -1;
     this.speed = 0.15;
-    this.canvas = document.getElementById('game');
-    this.ctx = this.canvas.getContext('2d');
-    this.munn = new PackMunn(Point.fromArray(Spawn.MUNN), Directions.NONE);
+    this.canvas = document.getElementById("game");
+    this.ctx = this.canvas.getContext("2d");
+    this.munn = new PackMunn(
+      Point.fromArray(Spawn.MUNN.POSITION),
+      Spawn.MUNN.DIRECTION
+    );
+    this.ghost = new Ghost(
+      Point.fromArray(Spawn.GHOSTS[0].POSITION),
+      Spawn.GHOSTS[0].DIRECTION
+    );
     this.score = 0;
-    this.scoreElement = document.getElementsByClassName('score')[0];
+    this.scoreElement = document.getElementsByClassName("score")[0];
   }
 
   getSquareColour = (row, col) => {
     switch (Grid[row][col]) {
       case Tile.TERRAIN:
-        return 'white';
+        return "white";
       case Tile.PATH:
-        return 'black';
+        return "black";
       case Tile.PATH_VISITED:
-        return 'blue';
+        return "blue";
       case Tile.BUG:
-        return 'purple';
+        return "purple";
       default:
-        return 'white';
+        return "white";
     }
   };
 
@@ -56,18 +63,31 @@ class Game {
   };
 
   drawCharacters = () => {
-    const characterDrawPoint = this.findCharacterOffsetFromMidPoint(
-      this.findMidPointTile(this.munn.position)
-    );
-
     Grid[this.munn.position.y][this.munn.position.x] = Tile.PATH_VISITED;
 
     this.munn.needsUpdate = false;
+    this.ghost.needsUpdate = false;
 
-    this.ctx.fillStyle = 'red';
+    // munn
+    const munnDrawPoint = this.findCharacterOffsetFromMidPoint(
+      this.findMidPointTile(this.munn.position)
+    );
+    this.ctx.fillStyle = "red";
     this.ctx.fillRect(
-      characterDrawPoint.x,
-      characterDrawPoint.y,
+      munnDrawPoint.x,
+      munnDrawPoint.y,
+      CHARACTER_SIZE,
+      CHARACTER_SIZE
+    );
+
+    // ghost
+    const ghostMidPoint = this.findCharacterOffsetFromMidPoint(
+      this.findMidPointTile(this.ghost.position)
+    );
+    this.ctx.fillStyle = "pink";
+    this.ctx.fillRect(
+      ghostMidPoint.x,
+      ghostMidPoint.y,
       CHARACTER_SIZE,
       CHARACTER_SIZE
     );
@@ -91,18 +111,18 @@ class Game {
   };
 
   setUpEventHandler = () => {
-    document.addEventListener('keydown', (event) => {
+    document.addEventListener("keydown", (event) => {
       switch (event.key) {
-        case 'ArrowLeft':
+        case "ArrowLeft":
           this.munn.move(Directions.LEFT);
           break;
-        case 'ArrowRight':
+        case "ArrowRight":
           this.munn.move(Directions.RIGHT);
           break;
-        case 'ArrowDown':
+        case "ArrowDown":
           this.munn.move(Directions.DOWN);
           break;
-        case 'ArrowUp':
+        case "ArrowUp":
           this.munn.move(Directions.UP);
           break;
         default:
@@ -141,6 +161,20 @@ class Game {
     }
 
     this.updateScore();
+    switch (this.ghost.direction) {
+      case Directions.RIGHT:
+        this.ghost.move(Directions.RIGHT);
+        break;
+      case Directions.LEFT:
+        this.ghost.move(Directions.LEFT);
+        break;
+      case Directions.UP:
+        this.ghost.move(Directions.UP);
+        break;
+      case Directions.DOWN:
+        this.ghost.move(Directions.DOWN);
+        break;
+    }
   };
 
   update = () => {

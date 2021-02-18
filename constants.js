@@ -6,16 +6,17 @@ export const Scores = {
   BUG: 50,
 };
 
-export const Spawn = {
-  MUNN: [1, 1],
+export const Directions = {
+  UP: "UP",
+  DOWN: "DOWN",
+  LEFT: "LEFT",
+  RIGHT: "RIGHT",
+  NONE: "NONE",
 };
 
-export const Directions = {
-  UP: 'UP',
-  DOWN: 'DOWN',
-  LEFT: 'LEFT',
-  RIGHT: 'RIGHT',
-  NONE: 'NONE',
+export const Spawn = {
+  MUNN: { POSITION: [1, 1], DIRECTION: Directions.NONE },
+  GHOSTS: [{ POSITION: [23, 9], DIRECTION: Directions.LEFT }],
 };
 
 export const Tile = {
