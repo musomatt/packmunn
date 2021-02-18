@@ -22,8 +22,12 @@ class Game {
       Point.fromArray(Spawn.MUNN.POSITION),
       Spawn.MUNN.DIRECTION
     );
-    this.ghosts = Spawn.GHOSTS.map((ghost) => {
-      return new Ghost(Point.fromArray(ghost.POSITION), ghost.DIRECTION);
+    this.ghosts = Spawn.GHOSTS.map((ghost, index) => {
+      return new Ghost(
+        Point.fromArray(ghost.POSITION),
+        ghost.DIRECTION,
+        `ghost-${index}.png`
+      );
     });
     this.score = 0;
     this.scoreElement = document.getElementsByClassName('score')[0];

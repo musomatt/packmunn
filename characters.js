@@ -66,9 +66,11 @@ export class PackMunn extends Character {
 }
 
 export class Ghost extends Character {
-  constructor(position, direction) {
+  constructor(position, direction, imageName) {
     super(position, direction);
     this.directionsList = Object.values(Directions).slice(0, 4);
+    this.image = new Image(CHARACTER_SIZE, CHARACTER_SIZE);
+    this.image.src = imageName;
   }
 
   move = (direction) => {
