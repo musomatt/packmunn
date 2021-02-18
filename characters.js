@@ -1,12 +1,17 @@
-import { Grid, Directions, Tile } from "./constants.js";
-import { Point } from "./point.js";
+import { Grid, Directions, Tile, CHARACTER_SIZE } from './constants.js';
+import { Point } from './point.js';
 
 export class Character {
   constructor(position, direction) {
+    this.image;
     this.position = position;
     this.direction = direction;
     this.needsUpdate = false;
   }
+
+  getImage = () => {
+    return this.image;
+  };
 
   canMoveToPosition = (newPosition) => {
     return Grid[newPosition.y][newPosition.x] !== Tile.TERRAIN;
@@ -29,6 +34,7 @@ export class Character {
         newPosition.addY(1);
         break;
     }
+
     return newPosition;
   };
 }
@@ -36,7 +42,10 @@ export class Character {
 export class PackMunn extends Character {
   constructor(position, direction) {
     super(position, direction);
+    this.image = new Image(CHARACTER_SIZE, CHARACTER_SIZE);
+    this.image.src = 'munnfunn.png';
   }
+
   move = (direction) => {
     if (this.needsUpdate === false) {
       const newPosition = this.workOutNewPosition(direction);
@@ -53,6 +62,7 @@ export class Ghost extends Character {
   constructor(position, direction) {
     super(position, direction);
   }
+
   move = (direction) => {
     if (this.needsUpdate === false) {
       const newPosition = this.workOutNewPosition(direction);

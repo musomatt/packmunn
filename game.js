@@ -1,5 +1,5 @@
-import { Ghost, PackMunn } from "./characters.js";
-import { Point } from "./point.js";
+import { Ghost, PackMunn } from './characters.js';
+import { Point } from './point.js';
 import {
   TILE_SIZE,
   CHARACTER_SIZE,
@@ -8,15 +8,16 @@ import {
   Tile,
   Grid,
   Scores,
-} from "./constants.js";
+} from './constants.js';
+import { Audio } from './audio.js';
 
 class Game {
   constructor() {
     this.dt = 0;
     this.last = -1;
     this.speed = 0.15;
-    this.canvas = document.getElementById("game");
-    this.ctx = this.canvas.getContext("2d");
+    this.canvas = document.getElementById('game');
+    this.ctx = this.canvas.getContext('2d');
     this.munn = new PackMunn(
       Point.fromArray(Spawn.MUNN.POSITION),
       Spawn.MUNN.DIRECTION
@@ -26,21 +27,22 @@ class Game {
       Spawn.GHOSTS[0].DIRECTION
     );
     this.score = 0;
-    this.scoreElement = document.getElementsByClassName("score")[0];
+    this.scoreElement = document.getElementsByClassName('score')[0];
+    this.bugImage = new Image(CHARACTER_SIZE, CHARACTER_SIZE);
+    this.bugImage.src = 'bug.png';
+    this.audio = new Audio();
   }
 
   getSquareColour = (row, col) => {
     switch (Grid[row][col]) {
       case Tile.TERRAIN:
-        return "white";
+        return 'white';
       case Tile.PATH:
-        return "black";
       case Tile.PATH_VISITED:
-        return "blue";
       case Tile.BUG:
-        return "purple";
+        return 'black';
       default:
-        return "white";
+        return 'white';
     }
   };
 
@@ -58,6 +60,16 @@ class Game {
 
         this.ctx.fillStyle = colour;
         this.ctx.fillRect(position.x, position.y, TILE_SIZE, TILE_SIZE);
+
+        if (Grid[row][col] === Tile.BUG) {
+          this.ctx.drawImage(
+            this.bugImage,
+            position.x,
+            position.y,
+            TILE_SIZE,
+            TILE_SIZE
+          );
+        }
       }
     }
   };
@@ -72,8 +84,9 @@ class Game {
     const munnDrawPoint = this.findCharacterOffsetFromMidPoint(
       this.findMidPointTile(this.munn.position)
     );
-    this.ctx.fillStyle = "red";
-    this.ctx.fillRect(
+
+    this.ctx.drawImage(
+      this.munn.getImage(),
       munnDrawPoint.x,
       munnDrawPoint.y,
       CHARACTER_SIZE,
@@ -84,7 +97,7 @@ class Game {
     const ghostMidPoint = this.findCharacterOffsetFromMidPoint(
       this.findMidPointTile(this.ghost.position)
     );
-    this.ctx.fillStyle = "pink";
+    this.ctx.fillStyle = 'pink';
     this.ctx.fillRect(
       ghostMidPoint.x,
       ghostMidPoint.y,
@@ -111,23 +124,25 @@ class Game {
   };
 
   setUpEventHandler = () => {
-    document.addEventListener("keydown", (event) => {
+    document.addEventListener('keydown', (event) => {
       switch (event.key) {
-        case "ArrowLeft":
+        case 'ArrowLeft':
           this.munn.move(Directions.LEFT);
           break;
-        case "ArrowRight":
+        case 'ArrowRight':
           this.munn.move(Directions.RIGHT);
           break;
-        case "ArrowDown":
+        case 'ArrowDown':
           this.munn.move(Directions.DOWN);
           break;
-        case "ArrowUp":
+        case 'ArrowUp':
           this.munn.move(Directions.UP);
           break;
         default:
           break;
       }
+
+      this.audio.startBackgroundMusic();
     });
   };
 
