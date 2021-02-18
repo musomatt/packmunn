@@ -22,10 +22,9 @@ class Game {
       Point.fromArray(Spawn.MUNN.POSITION),
       Spawn.MUNN.DIRECTION
     );
-    this.ghost = new Ghost(
-      Point.fromArray(Spawn.GHOSTS[0].POSITION),
-      Spawn.GHOSTS[0].DIRECTION
-    );
+    this.ghosts = Spawn.GHOSTS.map((ghost) => {
+      return new Ghost(Point.fromArray(ghost.POSITION), ghost.DIRECTION);
+    });
     this.score = 0;
     this.scoreElement = document.getElementsByClassName('score')[0];
     this.bugImage = new Image(CHARACTER_SIZE, CHARACTER_SIZE);
@@ -78,7 +77,6 @@ class Game {
     Grid[this.munn.position.y][this.munn.position.x] = Tile.PATH_VISITED;
 
     this.munn.needsUpdate = false;
-    this.ghost.needsUpdate = false;
 
     // munn
     const munnDrawPoint = this.findCharacterOffsetFromMidPoint(
@@ -93,22 +91,28 @@ class Game {
       CHARACTER_SIZE
     );
 
-    // ghost
-    const ghostMidPoint = this.findCharacterOffsetFromMidPoint(
-      this.findMidPointTile(this.ghost.position)
-    );
-    this.ctx.fillStyle = 'pink';
-    this.ctx.fillRect(
-      ghostMidPoint.x,
-      ghostMidPoint.y,
-      CHARACTER_SIZE,
-      CHARACTER_SIZE
-    );
+    // ghosts
+    this.ghosts.forEach((ghost) => {
+      ghost.needsUpdate = false;
+      const ghostMidPoint = this.findCharacterOffsetFromMidPoint(
+        this.findMidPointTile(ghost.position)
+      );
+      this.ctx.fillStyle = 'pink';
+      this.ctx.fillRect(
+        ghostMidPoint.x,
+        ghostMidPoint.y,
+        CHARACTER_SIZE,
+        CHARACTER_SIZE
+      );
+    });
   };
 
-  checkIfDead = (munnPosition, ghostPositions) => {
-    ghostPositions.forEach((ghostPos) => {
-      if (munnPosition.x === ghostPos.x && munnPosition.y === ghostPos.y) {
+  checkIfDead = (munnPosition, ghosts) => {
+    ghosts.forEach((ghost) => {
+      if (
+        munnPosition.x === ghost.position.x &&
+        munnPosition.y === ghost.position.y
+      ) {
         alert('u r ded');
       }
     });
@@ -183,23 +187,26 @@ class Game {
         break;
     }
 
-    this.checkIfDead(this.munn.position, [this.ghost.position]);
-    switch (this.ghost.direction) {
-      case Directions.RIGHT:
-        this.ghost.move(Directions.RIGHT);
-        break;
-      case Directions.LEFT:
-        this.ghost.move(Directions.LEFT);
-        break;
-      case Directions.UP:
-        this.ghost.move(Directions.UP);
-        break;
-      case Directions.DOWN:
-        this.ghost.move(Directions.DOWN);
-        break;
-    }
+    this.checkIfDead(this.munn.position, this.ghosts);
+    this.ghosts.forEach((ghost) => {
+      switch (ghost.direction) {
+        case Directions.RIGHT:
+          ghost.move(Directions.RIGHT);
+          break;
+        case Directions.LEFT:
+          ghost.move(Directions.LEFT);
+          break;
+        case Directions.UP:
+          ghost.move(Directions.UP);
+          break;
+        case Directions.DOWN:
+          ghost.move(Directions.DOWN);
+          break;
+      }
+    });
+
     // don't ask
-    this.checkIfDead(this.munn.position, [this.ghost.position]);
+    this.checkIfDead(this.munn.position, this.ghosts);
     this.updateScore();
   };
 
