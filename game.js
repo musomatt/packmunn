@@ -138,6 +138,7 @@ class Game {
         if (this.munn.isMunnbreakable) {
           this.ghosts.splice(i, 1);
           this.score += Scores.GHOST;
+          this.audio.playMunnChomp();
         } else {
           this.ended = true;
         }
