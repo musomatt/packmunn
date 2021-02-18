@@ -5,8 +5,10 @@ export class Audio {
   }
 
   startBackgroundMusic = () => {
-    this.backgroundAudioElement.play();
+    // this.backgroundAudioElement.play();
   };
 
-  playMunnChomp = () => {};
+  playMunnChomp = () => {
+    console.log('play munn chomp');
+  };
 }

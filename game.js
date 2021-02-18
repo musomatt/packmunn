@@ -110,7 +110,7 @@ class Game {
   checkIfDead = (munnPosition, ghostPositions) => {
     ghostPositions.forEach((ghostPos) => {
       if (munnPosition.x === ghostPos.x && munnPosition.y === ghostPos.y) {
-        alert("u r ded");
+        alert('u r ded');
       }
     });
   };
@@ -161,6 +161,7 @@ class Game {
     switch (tile) {
       case Tile.PATH:
         this.score += Scores.DOT;
+        this.audio.playMunnChomp();
         break;
       case Tile.BUG:
         this.score += Scores.BUG;
