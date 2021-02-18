@@ -31,6 +31,7 @@ class Game {
     this.bugImage.src = 'bug.png';
     this.audio = new Audio();
     this.munnbreakableTimeout;
+    this.ended = false;
   }
 
   getSquareColour = (row, col) => {
@@ -119,6 +120,7 @@ class Game {
           this.score += Scores.GHOST;
         } else {
           console.log('u r ded');
+          this.ended = true;
         }
       }
     });
@@ -234,9 +236,13 @@ class Game {
   };
 
   render = () => {
-    this.drawGrid();
-    this.drawCharacters();
-    this.drawScore();
+    if (!this.ended) {
+      this.drawGrid();
+      this.drawCharacters();
+      this.drawScore();
+    } else {
+      console.log('game over buddy');
+    }
   };
 
   loop = () => {
