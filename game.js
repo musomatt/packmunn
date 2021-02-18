@@ -104,7 +104,6 @@ class Game {
       CHARACTER_SIZE,
       CHARACTER_SIZE
     );
-    this.checkIfDead(this.munn.position, [this.ghost.position]);
   };
 
   checkIfDead = (munnPosition, ghostPositions) => {
@@ -185,7 +184,7 @@ class Game {
         break;
     }
 
-    this.updateScore();
+    this.checkIfDead(this.munn.position, [this.ghost.position]);
     switch (this.ghost.direction) {
       case Directions.RIGHT:
         this.ghost.move(Directions.RIGHT);
@@ -200,6 +199,9 @@ class Game {
         this.ghost.move(Directions.DOWN);
         break;
     }
+    // don't ask
+    this.checkIfDead(this.munn.position, [this.ghost.position]);
+    this.updateScore();
   };
 
   update = () => {
