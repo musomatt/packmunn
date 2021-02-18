@@ -91,6 +91,15 @@ class Game {
       CHARACTER_SIZE,
       CHARACTER_SIZE
     );
+    this.checkIfDead(this.munn.position, [this.ghost.position]);
+  };
+
+  checkIfDead = (munnPosition, ghostPositions) => {
+    ghostPositions.forEach((ghostPos) => {
+      if (munnPosition.x === ghostPos.x && munnPosition.y === ghostPos.y) {
+        alert("u r ded");
+      }
+    });
   };
 
   drawScore = () => {
