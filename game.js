@@ -30,6 +30,7 @@ class Game {
     this.bugImage = new Image(CHARACTER_SIZE, CHARACTER_SIZE);
     this.bugImage.src = 'bug.png';
     this.audio = new Audio();
+    this.munnbreakableTimeout;
   }
 
   getSquareColour = (row, col) => {
@@ -127,6 +128,11 @@ class Game {
     if (Grid[this.munn.position.y][this.munn.position.x] === Tile.BUG) {
       console.log('bug');
       this.munn.isMunnbreakable = true;
+      clearTimeout(this.munnbreakableTimeout);
+      this.munnbreakableTimeout = setTimeout(() => {
+        this.munn.isMunnbreakable = false;
+        console.log('No longer invincible');
+      }, 7000);
     }
   };
 
