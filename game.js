@@ -109,7 +109,7 @@ class Game {
   checkIfDead = (munnPosition, ghostPositions) => {
     ghostPositions.forEach((ghostPos) => {
       if (munnPosition.x === ghostPos.x && munnPosition.y === ghostPos.y) {
-        alert('u r ded');
+        console.log('u r ded');
       }
     });
   };
