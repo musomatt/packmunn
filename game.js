@@ -107,15 +107,26 @@ class Game {
     });
   };
 
-  checkIfDead = (munnPosition, ghosts) => {
-    ghosts.forEach((ghost) => {
+  checkIfCollidedWithGhost = () => {
+    this.ghosts.forEach((ghost) => {
       if (
-        munnPosition.x === ghost.position.x &&
-        munnPosition.y === ghost.position.y
+        this.munn.position.x === ghost.position.x &&
+        this.munn.position.y === ghost.position.y
       ) {
-        console.log('u r ded');
+        if (this.munn.isMunnbreakable) {
+          console.log('hooray');
+        } else {
+          console.log('u r ded');
+        }
       }
     });
+  };
+
+  checkIfMunnbreakable = () => {
+    if (Grid[this.munn.position.y][this.munn.position.x] === Tile.BUG) {
+      console.log('bug');
+      this.munn.isMunnbreakable = true;
+    }
   };
 
   drawScore = () => {
@@ -187,8 +198,8 @@ class Game {
         this.munn.move(Directions.DOWN);
         break;
     }
-
-    this.checkIfDead(this.munn.position, this.ghosts);
+    this.checkIfMunnbreakable();
+    this.checkIfCollidedWithGhost();
     this.ghosts.forEach((ghost) => {
       switch (ghost.direction) {
         case Directions.RIGHT:
@@ -207,7 +218,7 @@ class Game {
     });
 
     // don't ask
-    this.checkIfDead(this.munn.position, this.ghosts);
+    this.checkIfCollidedWithGhost();
     this.updateScore();
   };
 
