@@ -61,21 +61,53 @@ export class PackMunn extends Character {
 export class Ghost extends Character {
   constructor(position, direction) {
     super(position, direction);
+    this.directionsList = Object.values(Directions).slice(0, 4);
   }
 
   move = (direction) => {
     if (this.needsUpdate === false) {
-      const newPosition = this.workOutNewPosition(direction);
-      if (this.canMoveToPosition(newPosition)) {
-        this.position = newPosition;
-        this.direction = direction;
-        this.needsUpdate = true;
-      } else {
-        const randomDirection = Object.values(Directions).slice(0, 4)[
-          Math.floor(Math.random() * 4)
-        ];
-        this.move(randomDirection);
-      }
+      const possibleDirections = this.getPossibleDirections(
+        this.position,
+        direction
+      );
+      const randomDirection = this.randomDirection(possibleDirections);
+      const newPosition = this.workOutNewPosition(randomDirection);
+      this.position = newPosition;
+      this.direction = randomDirection;
+      this.needsUpdate = true;
     }
+  };
+
+  getPossibleDirections = (currentPosition, currentDirection) => {
+    const backwardsDirection = this.backwardsDirection(currentDirection);
+    const possibleDirections = [];
+    const canMoveUp = Grid[currentPosition.y - 1][currentPosition.x] !== 0;
+    const canMoveDown = Grid[currentPosition.y + 1][currentPosition.x] !== 0;
+    const canMoveRight = Grid[currentPosition.y][currentPosition.x + 1] !== 0;
+    const canMoveLeft = Grid[currentPosition.y][currentPosition.x - 1] !== 0;
+
+    if (backwardsDirection !== Directions.LEFT && canMoveLeft) {
+      possibleDirections.push(Directions.LEFT);
+    }
+    if (backwardsDirection !== Directions.RIGHT && canMoveRight) {
+      possibleDirections.push(Directions.RIGHT);
+    }
+    if (backwardsDirection !== Directions.UP && canMoveUp) {
+      possibleDirections.push(Directions.UP);
+    }
+    if (backwardsDirection !== Directions.DOWN && canMoveDown) {
+      possibleDirections.push(Directions.DOWN);
+    }
+    return possibleDirections;
+  };
+  randomDirection = (directionsList) => {
+    return directionsList[Math.floor(Math.random() * directionsList.length)];
+  };
+  backwardsDirection = (direction) => {
+    const currentDirectionIndex = this.directionsList.indexOf(direction);
+    const oppositeDirectionIndex =
+      (currentDirectionIndex + this.directionsList.length + 2) %
+      this.directionsList.length;
+    return this.directionsList[oppositeDirectionIndex];
   };
 }

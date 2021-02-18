@@ -8,8 +8,8 @@ export const Scores = {
 
 export const Directions = {
   UP: 'UP',
-  DOWN: 'DOWN',
   LEFT: 'LEFT',
+  DOWN: 'DOWN',
   RIGHT: 'RIGHT',
   NONE: 'NONE',
 };
