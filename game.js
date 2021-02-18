@@ -26,7 +26,7 @@ class Game {
       return new Ghost(
         Point.fromArray(ghost.POSITION),
         ghost.DIRECTION,
-        `ghost-${index}.png`
+        `gunther-${index}.png`
       );
     });
     this.score = 0;
@@ -47,7 +47,7 @@ class Game {
       case Tile.PATH:
       case Tile.PATH_VISITED:
       case Tile.BUG:
-        return '#946b69';
+        return 'transparent';
       default:
         return 'white';
     }
@@ -113,11 +113,13 @@ class Game {
     // ghosts
     this.ghosts.forEach((ghost) => {
       ghost.needsUpdate = false;
+
       const ghostMidPoint = this.findCharacterOffsetFromMidPoint(
         this.findMidPointTile(ghost.position)
       );
-      this.ctx.fillStyle = 'pink';
-      this.ctx.fillRect(
+
+      this.ctx.drawImage(
+        ghost.getImage(),
         ghostMidPoint.x,
         ghostMidPoint.y,
         CHARACTER_SIZE,
