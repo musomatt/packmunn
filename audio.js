@@ -17,24 +17,40 @@ export class Audio {
     this.munnchElement.src = 'munnch.mp3';
     this.munnchElement.loop = false;
     this.munnchElement.volume = 0.1;
+
+    this.munnDownElement = document.createElement('audio');
+    this.munnDownElement.src = 'munn-down.mp3';
+    this.munnDownElement.loop = false;
+    this.munnDownElement.volume = 0.3;
   }
 
   startBackgroundMusic = () => {
-    // this.backgroundAudioElement.play();
+    this.backgroundAudioElement.play();
   };
 
   playMunnChomp = () => {
-    // this.munnChompElement.currentTime = 0;
-    // this.munnChompElement.play();
+    this.munnChompElement.currentTime = 0;
+    this.munnChompElement.play();
   };
 
   playMunnch = () => {
-    // this.munnchElement.currentTime = 0;
-    // this.munnchElement.play();
+    this.munnchElement.currentTime = 0;
+    this.munnchElement.play();
   };
 
   playMunnFunn = () => {
-    // this.munnFunnElement.currentTime = 0;
-    // this.munnFunnElement.play();
+    this.munnFunnElement.currentTime = 0;
+    this.munnFunnElement.play();
+  };
+
+  playMunnDown = () => {
+    this.munnDownElement.currentTime = 0;
+    this.munnDownElement.play();
+  };
+
+  stopAudio = () => {
+    this.munnchElement.src = '';
+    this.munnChompElement.src = '';
+    this.backgroundAudioElement.src = '';
   };
 }

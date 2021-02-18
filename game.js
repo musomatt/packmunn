@@ -34,6 +34,7 @@ class Game {
     this.audio = new Audio();
     this.munnbreakableTimeout;
     this.ended = false;
+    this.shownModal = false;
   }
 
   getSquareColour = (row, col) => {
@@ -132,7 +133,6 @@ class Game {
           this.ghosts.splice(i, 1);
           this.score += Scores.GHOST;
         } else {
-          console.log('u r ded');
           this.ended = true;
         }
       }
@@ -160,8 +160,11 @@ class Game {
   };
 
   gameOver = () => {
+    this.audio.stopAudio();
+    this.audio.playMunnDown();
     const modal = document.getElementById('gameOverModal');
     modal.style.display = 'block';
+    this.shownModal = true;
   };
 
   findMidPointTile = (position) => {
@@ -261,7 +264,7 @@ class Game {
       this.drawGrid();
       this.drawCharacters();
       this.drawScore();
-    } else {
+    } else if (!this.shownModal) {
       this.gameOver();
       console.log('game over buddy');
     }
