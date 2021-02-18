@@ -6,11 +6,17 @@ const Spawn = {
 };
 
 const Directions = {
-  UP: "UP",
-  DOWN: "DOWN",
-  LEFT: "LEFT",
-  RIGHT: "RIGHT",
-  NONE: "NONE",
+  UP: 'UP',
+  DOWN: 'DOWN',
+  LEFT: 'LEFT',
+  RIGHT: 'RIGHT',
+  NONE: 'NONE',
+};
+
+const Tile = {
+  TERRAIN: 0,
+  PATH: 1,
+  PATH_VISITED: 2,
 };
 
 const Grid = [
@@ -57,13 +63,36 @@ class Character {
   constructor(position, direction) {
     this.position = position;
     this.direction = direction;
+    this.needsUpdate = false;
   }
+
+  canMoveToPosition = (newPosition) => {
+    return Grid[newPosition.y][newPosition.x] !== Tile.TERRAIN;
+  };
+
   move = (direction) => {
-    const newPosition = new Point(this.position.x, this.position.y);
-    switch (direction) {
-      case Directions.RIGHT:
-        newPosition.addX(1);
+    if (this.needsUpdate === false) {
+      const newPosition = new Point(this.position.x, this.position.y);
+
+      switch (direction) {
+        case Directions.RIGHT:
+          newPosition.addX(1);
+          break;
+        case Directions.LEFT:
+          newPosition.subX(1);
+          break;
+        case Directions.UP:
+          newPosition.subY(1);
+          break;
+        case Directions.DOWN:
+          newPosition.addY(1);
+          break;
+      }
+
+      if (this.canMoveToPosition(newPosition)) {
         this.position = newPosition;
+        this.needsUpdate = true;
+      }
     }
   };
 }
@@ -78,14 +107,23 @@ class Game {
   constructor() {
     this.dt = 0;
     this.last = -1;
-    this.speed = 0.4;
-    this.canvas = document.getElementById("game");
-    this.ctx = this.canvas.getContext("2d");
+    this.speed = 0.02;
+    this.canvas = document.getElementById('game');
+    this.ctx = this.canvas.getContext('2d');
     this.munn = new PackMunn(Point.fromArray(Spawn.MUNN), Directions.NONE);
   }
 
   getSquareColour = (row, col) => {
-    return Grid[row][col] === 1 ? "#000000" : "#FFFFFF";
+    switch (Grid[row][col]) {
+      case Tile.TERRAIN:
+        return 'white';
+      case Tile.PATH:
+        return 'black';
+      case Tile.PATH_VISITED:
+        return 'blue';
+      default:
+        return 'white';
+    }
   };
 
   getSquarePosition = (row, col) => {
@@ -110,7 +148,12 @@ class Game {
     const characterDrawPoint = this.findCharacterOffsetFromMidPoint(
       this.findMidPointTile(this.munn.position)
     );
-    this.ctx.fillStyle = "red";
+
+    Grid[this.munn.position.y][this.munn.position.x] = Tile.PATH_VISITED;
+
+    this.munn.needsUpdate = false;
+
+    this.ctx.fillStyle = 'red';
     this.ctx.fillRect(
       characterDrawPoint.x,
       characterDrawPoint.y,
@@ -131,22 +174,21 @@ class Game {
   };
 
   setUpEventHandler = () => {
-    document.addEventListener("keydown", (event) => {
+    document.addEventListener('keydown', (event) => {
       switch (event.key) {
-        case "ArrowLeft":
-          console.log("Left was pressed");
+        case 'ArrowLeft':
+          this.munn.move(Directions.LEFT);
           break;
-        case "ArrowRight":
+        case 'ArrowRight':
           this.munn.move(Directions.RIGHT);
           break;
-        case "ArrowDown":
-          console.log("Down was pressed");
+        case 'ArrowDown':
+          this.munn.move(Directions.DOWN);
           break;
-        case "ArrowUp":
-          console.log("Up was pressed");
+        case 'ArrowUp':
+          this.munn.move(Directions.UP);
           break;
         default:
-          console.log("invalid key");
           break;
       }
     });
